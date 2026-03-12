@@ -1,0 +1,2094 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <title>昶青數位資料中心APP</title>
+    <!-- 載入 Google Charts -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style>
+      /* ----- Reset & Global ----- */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      html {
+        height: 100%;
+      }
+
+      body {
+        font-family: -apple-system, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100%;
+        background: linear-gradient(135deg, #a5f571 30%, #07e9f5 50%, #054175 100%);
+        background-size: 250% 250%;
+        -webkit-animation: gradientBG 15s ease infinite;
+        animation: gradientBG 15s ease infinite;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 8px;
+        position: relative;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        transform: translateZ(0);
+      }
+
+      @-webkit-keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      /* ----- Floating Letters (T, C, C) ----- */
+      .letter {
+        position: fixed;
+        font-weight: bold;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: -3;
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        opacity: 0;
+        transform: scale(0);
+      }
+      
+      .letter-t {
+        color: #00bfff;
+        animation: letterExplosion 1s forwards, moveRandom-T 90s infinite alternate ease-in-out, sizeChange-T 24s infinite alternate ease-in-out, colorChange-1 84s infinite;
+      }
+      
+      .letter-c1 {
+        color: #00ff7f;
+        animation: letterExplosion 1s 0.2s forwards, moveRandom-C1 96s infinite alternate ease-in-out, sizeChange-C1 27s infinite alternate ease-in-out, colorChange-2 87s infinite;
+      }
+      
+      .letter-c2 {
+        color: #f09707;
+        animation: letterExplosion 1s 0.4s forwards, moveRandom-C2 102s infinite alternate ease-in-out, sizeChange-C2 30s infinite alternate ease-in-out, colorChange-3 90s infinite;
+      }
+      
+      @keyframes letterExplosion {
+        0% {
+          opacity: 0;
+          transform: scale(0) rotate(0deg);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(3) rotate(180deg);
+        }
+        100% {
+          opacity: 0.8;
+          transform: scale(1) rotate(360deg);
+        }
+      }
+
+      @keyframes moveRandom-T {
+        0% { top: 10%; left: 10%; }
+        10% { top: 40%; left: 80%; }
+        20% { top: 80%; left: 15%; }
+        30% { top: 30%; left: 60%; }
+        40% { top: 70%; left: 30%; }
+        50% { top: 20%; left: 50%; }
+        60% { top: 60%; left: 20%; }
+        70% { top: 50%; left: 70%; }
+        80% { top: 15%; left: 40%; }
+        90% { top: 90%; left: 90%; }
+        100% { top: 50%; left: 50%; }
+      }
+      
+      @keyframes moveRandom-C1 {
+        0% { top: 90%; left: 20%; }
+        10% { top: 20%; left: 40%; }
+        20% { top: 50%; left: 85%; }
+        30% { top: 80%; left: 10%; }
+        40% { top: 40%; left: 60%; }
+        50% { top: 60%; left: 30%; }
+        60% { top: 30%; left: 70%; }
+        70% { top: 70%; left: 50%; }
+        80% { top: 25%; left: 90%; }
+        90% { top: 55%; left: 15%; }
+        100% { top: 30%; left: 30%; }
+      }
+      
+      @keyframes moveRandom-C2 {
+        0% { top: 50%; left: 50%; }
+        10% { top: 70%; left: 20%; }
+        20% { top: 30%; left: 80%; }
+        30% { top: 60%; left: 40%; }
+        40% { top: 20%; left: 70%; }
+        50% { top: 80%; left: 30%; }
+        60% { top: 10%; left: 60%; }
+        70% { top: 90%; left: 10%; }
+        80% { top: 40%; left: 90%; }
+        90% { top: 15%; left: 25%; }
+        100% { top: 75%; left: 75%; }
+      }
+      
+      @keyframes sizeChange-T {
+        0%, 100% { font-size: 40px; }
+        20% { font-size: 60px; }
+        40% { font-size: 30px; }
+        60% { font-size: 70px; }
+        80% { font-size: 50px; }
+      }
+      
+      @keyframes sizeChange-C1 {
+        0%, 100% { font-size: 50px; }
+        25% { font-size: 35px; }
+        50% { font-size: 65px; }
+        75% { font-size: 45px; }
+      }
+      
+      @keyframes sizeChange-C2 {
+        0%, 100% { font-size: 45px; }
+        33% { font-size: 70px; }
+        66% { font-size: 35px; }
+      }
+      @keyframes colorChange-1 {
+        0%, 100% { color: #00bfff; }
+        33% { color: #00ff7f; }
+        66% { color: #ff4500; }
+      }
+      @keyframes colorChange-2 {
+        0%, 100% { color: #00ff7f; }
+        33% { color: #ff4500; }
+        66% { color: #00bfff; }
+      }
+      @keyframes colorChange-3 {
+        0%, 100% { color: #ff4500; }
+        33% { color: #00bfff; }
+        66% { color: #00ff7f; }
+      }
+
+      /* ----- Container & Heading ----- */
+      .container {
+        position: relative;
+        background: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(5px);
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.1);
+        max-width: 1200px;
+        width: 100%;
+      }
+      .container::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0;
+        width: 100px; height: 100px;
+        background: linear-gradient(135deg, #2193b0 0%, transparent 70%);
+        opacity: 0.3;
+        border-top-left-radius: 30px;
+      }
+      .container::after {
+        content: "";
+        position: absolute;
+        bottom: 0; right: 0;
+        width: 100px; height: 40px;
+        background: linear-gradient(315deg, #6dd5ed 0%, transparent 70%);
+        opacity: 0.3;
+        border-bottom-right-radius: 30px;
+      }
+
+      h2 {
+        text-align: center;
+        color: #054496;
+        margin-bottom: 20px;
+        font-size: 2em;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        position: relative;
+        padding-bottom: 15px;
+        margin-top: 20px;
+      }
+      .logo-img {
+        max-width: 200px;
+        margin: 25px auto 0; 
+        display: block;
+        border-radius: 0px;
+        box-shadow: 0 3px 8px rgba(0,0,0,0);
+      }
+      h2::after {
+        content: "";
+        position: absolute;
+        bottom: 0; left: 50%;
+        transform: translateX(-50%);
+        width: 300px; height: 4px;
+        background: linear-gradient(90deg, #2193b0, #6dd5ed);
+        border-radius: 30px;
+        margin-bottom: 5px;
+      }
+
+      .form-group {
+        margin-bottom: 0px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      /* 調整第一個表單組的上邊距，使其位於超級連結按鈕下方 */
+      .first-form-group {
+        margin-top: 100px; /* 根據超級連結按鈕的位置調整這個值 */
+      }
+
+      label {
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #147802;
+        font-size: 1.4em;
+        display: flex;
+        align-items: center;
+      }
+      label::before {
+        content: "";
+        display: inline-block;
+        width: 8px; height: 25px;
+        background: linear-gradient(to bottom, #05f51d, #055702);
+        margin-right: 10px;
+        border-radius: 20px;
+      }
+
+      select, button, input[type="text"], input[type="password"] {
+        padding: 15px 15px;
+        border: 2px solid rgba(33, 147, 176, 0.3);
+        border-radius: 20px;
+        font-size: 1.1em;
+        outline: none;
+        transition: all 0.3s ease;
+        background-color: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05), inset 0 2px 5px rgba(255,255,255,0.5);
+        min-height: 40px;
+      }
+      input::placeholder {
+        font-size: 1.2em;
+      }
+      input[type="text"]:focus, input[type="password"]:focus, select:focus {
+        border-color: #2193b0;
+        box-shadow: 0 0 15px rgba(33, 147, 176, 0.5), inset 0 2px 5px rgba(255,255,255,0.6);
+        background-color: rgba(255, 255, 255, 0.5);
+      }
+      button {
+        background: linear-gradient(45deg, #b608c9,#f7cbf7 );
+        color: white;
+        cursor: pointer;
+        box-shadow: 0 8px 15px rgba(33, 147, 176, 0.3), 0 4px 6px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        font-size: 1.3em;        
+        border: none;
+        position: relative;
+        overflow: hidden;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        font-weight: bold;
+        transform: translateZ(0);
+      }
+      button:hover {
+        background: linear-gradient(45deg, #b608c9, #2193b0);
+        box-shadow: 0 10px 20px rgba(33, 147, 176, 0.4), 0 6px 10px rgba(0,0,0,0.15);
+        transform: translateY(-2px);
+      }
+      button:active {
+        transform: translateY(1px);
+        box-shadow: 0 5px 10px rgba(33, 147, 176, 0.3);
+      }
+
+     /* Stats Button */
+#statsButton {
+  position: absolute;
+  top: 250px; 
+  left: 10px;
+  padding: 3px 3px;
+  background: linear-gradient(45deg, #20b2aa, #3cb371);
+  color: white; 
+  border: none; 
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(32, 178, 170, 0.4), 0 3px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  font-size: 1.2em; 
+  font-weight: bold;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  min-height: 35px;
+  
+  min-width: 80px; /* 調整為固定寬度 */
+  width: 90px;     /* 添加固定寬度 */
+}
+#statsButton:hover {
+  background: linear-gradient(45deg, #3cb371, #20b2aa);
+  box-shadow: 0 8px 20px rgba(32, 178, 170, 0.5), 0 5px 12px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+#statsButton::before {
+  content: "📊";
+  margin-right: 8px;
+  font-size: 0.7em;
+  display: inline-block;
+  transition: all 0.3s ease;
+  position: relative;
+  top: -1px;
+}
+#statsButton:hover::before {
+  transform: rotate(360deg);
+  font-size: 1em;
+}
+
+/* NEW: 超級連結按鈕 (s3限定) */
+#linksButton {
+  position: absolute;
+  top: 250px;
+  left: 110px;
+  padding: 8px 8px;
+  background: linear-gradient(45deg, #e0a204, #fad270);
+  color: #001a26; 
+  border: none; 
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(255, 182, 72, 0.4), 0 3px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  font-size: 1.3em; 
+  font-weight: bold;
+  display: none;  /* 預設隱藏，s3才顯示 */
+  align-items: center; 
+  justify-content: center;
+  min-height: 35px;
+  
+  min-width: 80px; /* 調整為固定寬度 */
+  width: 90px;     /* 添加固定寬度 */
+}
+#linksButton:hover {
+  background: linear-gradient(45deg, #ffc947, #ffb700);
+  box-shadow: 0 8px 20px rgba(255, 182, 72, 0.5), 0 5px 12px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+#linksButton:active {
+  background: linear-gradient(45deg, #bd6802, #ffb700);
+}
+#linksButton::before {
+  content: "🔗";
+  margin-right: 8px;
+  font-size: 0.7em; /* 調整為和statsButton一致 */
+  display: inline-block;
+  transition: all 0.3s ease;
+  position: relative;
+  top: -1px;
+}
+#linksButton:hover::before {
+  transform: rotate(360deg); /* 添加和statsButton一致的旋轉效果 */
+  font-size: 1em;
+}
+
+/* ★ NEW CODE: AI助手 按鈕 (所有人可見，大小與linksButton相同) */
+#aiButton {
+  position: absolute;
+  top: 250px;
+  left: 210px; /* 與 linksButton 的 left:110px 做區隔 */
+  padding: 8px 8px;
+  background: linear-gradient(45deg,#6fd1f7,#178fd4);
+  color: #001a26; 
+  border: none; 
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(255, 182, 72, 0.4), 0 3px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  font-size: 1.3em; 
+  font-weight: bold;
+  display: block; /* 所有人都可見 */
+  align-items: center; 
+  justify-content: center;
+  min-height: 35px;
+  width: 90px; /* 與 linksButton 一致 */
+}
+#aiButton:hover {
+  background: linear-gradient(45deg, #ffc947, #ffb700);
+  box-shadow: 0 8px 20px rgba(255, 182, 72, 0.5), 0 5px 12px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+#aiButton:active {
+  background: linear-gradient(45deg, #cb4cf5, #eac3f7);
+}
+#aiButton::before {
+  content: "🤖";
+  margin-right: 8px;
+  font-size: 0.8em;
+  display: inline-block;
+  transition: all 0.3s ease;
+  position: relative;
+  top: -1px;
+}
+#aiButton:hover::before {
+  transform: rotate(360deg);
+  font-size: 1em;
+}
+
+/* 福委會按鈕樣式 */
+#welfareButton {
+  position: absolute;
+  top: 290px; /* 將按鈕放在使用統計按鈕下方 */
+  left: 10px;
+  padding: 3px 3px;
+  background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+  color: #333; 
+  border: none; 
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(255, 154, 158, 0.4), 0 3px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  font-size: 1.3em; 
+  font-weight: bold;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  min-height: 35px;
+  min-width: 80px;
+  width: 90px;
+}
+
+#welfareButton:hover {
+  background: linear-gradient(45deg, #fad0c4, #ff9a9e);
+  box-shadow: 0 8px 20px rgba(255, 154, 158, 0.5), 0 5px 12px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+
+#welfareButton::before {
+  content: "🎁";
+  margin-right: 8px;
+  font-size: 0.7em;
+  display: inline-block;
+  transition: all 0.3s ease;
+  position: relative;
+  top: -1px;
+}
+
+#welfareButton:hover::before {
+  transform: rotate(360deg);
+  font-size: 1em;
+}
+
+/* 昶青文化按鈕樣式 */
+#cultureButton {
+  position: absolute;
+  top: 290px; /* 將按鈕放在福委會按鈕旁邊 */
+  left: 110px;
+  padding: 3px 3px;
+  background: linear-gradient(45deg, #f2fa07, #f7fa9d);
+  color: black; 
+  border: none; 
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(142, 68, 173, 0.4), 0 3px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  font-size: 1.3em; 
+  font-weight: bold;
+  font-color: #141400;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  min-height: 35px;
+  min-width: 80px;
+  width: 90px;
+}
+
+#cultureButton:hover {
+  background: linear-gradient(45deg, #9b59b6, #8e44ad);
+  box-shadow: 0 8px 20px rgba(142, 68, 173, 0.5), 0 5px 12px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+
+#cultureButton::before {
+  content: "🏛️";
+  margin-right: 8px;
+  font-size: 0.7em;
+  display: inline-block;
+  transition: all 0.3s ease;
+  position: relative;
+  top: -1px;
+}
+
+#cultureButton:hover::before {
+  transform: rotate(360deg);
+  font-size: 1em;
+}
+
+/* Logout Button */
+#logoutButton {
+  position: absolute;
+  top: 10px; right: 10px;
+  padding: 8px 15px;
+  background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+  color: white; border: none; border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(255, 107, 107, 0.), 0 3px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  font-size: 0.8em; font-weight: bold;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 30px;
+}
+#logoutButton:hover {
+  background: linear-gradient(45deg, #ff8e8e, #ff6b6b);
+  box-shadow: 0 8px 20px rgba(255, 107, 107, 0.5), 0 5px 12px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+#logoutButton:active {
+  background: linear-gradient(45deg, #b50404, #ff6b6b);
+}
+#logoutButton::before {
+  content: "🚪";
+  margin-right: 8px;
+  font-size: 0.8em;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+/* 按鈕點擊效果 */
+.button-clicked {
+  animation: buttonClick 0.5s;
+}
+@keyframes buttonClick {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+/* User Info */
+#userInfo {
+  position: absolute;
+  top: 60px; right: 10px;
+  padding: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  border-radius: 10px;
+  font-size: 0.6em;
+  color: #054496;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  text-align: right;
+  min-width: 77px;  
+  width: auto;
+}
+#userName {
+  font-weight: bold;
+  font-size: 1em;
+}
+
+/* Result (iframe) */
+#result {
+  margin-top: 10px;
+  text-align: center;
+  position: relative;
+}
+iframe {
+  width: 100%; height: 1000px;
+  border: none; border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  background-color: white;
+}
+iframe:hover {
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2), 0 8px 20px rgba(0,0,0,0.15);
+}
+a.download-link {
+  display: inline-block;
+  margin-top: 20px; padding: 15px 30px;
+  background: linear-gradient(45deg, #2193b0, #6dd5ed);
+  color: white; text-decoration: none; border-radius: 50px;
+  transition: all 0.3s ease;
+  font-size: 3em; font-weight: bold;
+  box-shadow: 0 8px 15px rgba(33, 147, 176, 0.3), 0 4px 6px rgba(0,0,0,0.1);
+  position: relative; overflow: hidden; min-height: 60px;
+  transform: translateZ(0);
+}
+a.download-link:hover {
+  background: linear-gradient(45deg, #6dd5ed, #2193b0);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(33, 147, 176, 0.4), 0 6px 12px rgba(0,0,0,0.15);
+}
+a.download-link:active {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 10px rgba(33, 147, 176, 0.3);
+}
+a.download-link::before {
+  content: "⬇️";
+  margin-right: 12px;
+}
+
+/* Login Screen */
+#loginScreen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, #a5f571 30%, #07e9f5 50%, #054175 100%);
+  background-size: 250% 250%;
+  animation: gradientBG 15s ease infinite;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0; /* 添加上下內邊距 */
+}
+
+#loginBox {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  margin: 20px 0; /* 添加上下外邊距 */
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.1);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+#loginBox h3 {
+  color: #054496;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+#loginError {
+  color: #ff6b6b;
+  margin: 10px 0;
+  font-weight: bold;
+  display: none;
+}
+
+/* Modal (使用統計) */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  overflow: auto;
+}
+.modal-content {
+  position: relative;
+  background: white;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  width:90%;
+  max-width: 1000px;
+  animation: modalOpen 0.4s;
+}
+@keyframes modalOpen {
+  from { opacity: 0; transform: translateY(-50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.close {
+  position: absolute;
+  top: 15px; right: 20px;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.close:hover {
+  color: #333;
+  transform: rotate(90deg);
+}
+.chart-container {
+  width: 100%;
+  height:400px;
+  margin: 10px 0;
+}
+
+繼續提供完整代碼的其餘部分：
+
+```html
+/* NEW: Important Links Modal */
+#linksModal {
+  display: none;
+  position: fixed;
+  z-index: 1001;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  overflow: auto;
+}
+#linksModal .modal-content {
+  position: relative;
+  background: white;
+  margin: 10% auto; /* 確保水平置中 */
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  width: 90%;
+  max-width: 800px;
+  animation: modalOpen 0.4s;
+  left: 0; /* 移除任何可能的左側偏移 */
+  right: 0; /* 移除任何可能的右側偏移 */
+}
+/* 確保模態視窗覆蓋整個畫面 */
+#linksModal {
+  display: none;
+  position: fixed;
+  z-index: 1001;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  overflow: auto;
+}
+#linksTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+#linksTable th, #linksTable td {
+  border: 1px solid #ccc;
+  padding: 8px 10px;
+  text-align: left;
+}
+#linksTable th {
+  background-color: #f2f2f2;
+}
+
+/* 第一欄 */
+#linksTable td:nth-child(1) {
+  font-size: 11px;
+  width: 50%;  /* 佔表格寬度的 30% */
+}
+
+/* 第二欄 */
+#linksTable td:nth-child(2) {
+  font-size: 6px;
+  width: 50%;  /* 佔表格寬度的 70% */
+}
+
+/* 
+  ----- Media Queries -----
+  這裡有三段: 
+  1) @media (max-width: 820px)
+  2) @media only screen and (max-width: 820px) and (-webkit-min-device-pixel-ratio: 2)
+  3) 再一個 @media (max-width: 820px) 
+  全都保留 
+*/
+
+@media (max-width: 820px) {
+  .container { padding: 30px; }
+  h2 { font-size: 2.2em; }
+  label { font-size: 1.3em; }
+  select, button, input[type="text"], input[type="password"] { font-size: 1.2em; }
+  iframe { height: 500px; }
+  a.download-link { font-size: 1em; padding: 12px 25px; }
+}
+
+@media only screen and (max-width: 820px) and (-webkit-min-device-pixel-ratio: 2) {
+  h2 { font-size: 2em; }
+  label { font-size: 1em; }
+  select, button, input[type="text"], input[type="password"] { font-size: 1.2em; padding: 12px 12px; }
+  #statsButton, #logoutButton { font-size: 0.8em; }
+  a.download-link { font-size: 1em; }
+}
+
+@media (max-width: 820px) {
+  .container { padding: 15px; }
+  #statsButton { 
+    font-size: 0.9em; 
+    min-height: 35px; 
+    min-width: 110px; 
+    padding: 8px 12px; 
+    top: 240px; 
+  }
+  #userInfo { top: 50px; right: 10px; font-size: 0.8em; }
+  #linksButton {
+    font-size: 0.9em;
+    min-height: 35px;
+    min-width: 110px;
+    padding: 8px 12px;
+    top: 240px;
+    left: 240px;
+  }
+  #aiButton {
+    font-size: 0.9em;
+    min-height: 35px;
+    min-width: 110px;
+    padding: 8px 12px;
+    top: 240px;
+    left: 125px;
+  }
+}
+
+/* 媒體查詢調整 */
+@media (max-width: 820px) {
+  #welfareButton { 
+    font-size: 1em; 
+    min-height: 35px; 
+    min-width: 110px; 
+    padding: 8px 12px; 
+    top: 290px; 
+  }
+  
+  #cultureButton { 
+    font-size: 0.9em; 
+    min-height: 35px; 
+    min-width: 110px; 
+    padding: 8px 12px; 
+    top: 290px; 
+    left: 125px;
+  }
+  
+  .first-form-group {
+    margin-top: 120px; /* 在小螢幕上調整邊距 */
+  }
+}
+
+@media (max-width: 600px) {
+  #linksTable td:nth-child(1) {
+    font-size: 16px;
+    width: 70%;  /* 名稱欄位佔表格寬度的 35% */  
+  }
+  
+  #linksTable td:nth-child(2) {
+    font-size: 10px;
+    width: 30%;  /* 名稱欄位佔表格寬度的 35% */  
+  }
+  
+  #linksTable td {
+    padding: 10px 8px; /* 在手機上增加垂直間距 */
+  }
+  
+  #linksTable a {
+    word-break: break-all; /* 確保超連結在手機上會換行 */
+  }
+}
+
+/* ★ AI Modal (寬度90%) */
+#aiModal {
+  display: none;
+  position: fixed;
+  z-index: 1002;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  overflow: auto;
+}
+
+#aiModal .modal-content {
+  position: relative;
+  background: white;
+  margin: 5% auto;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  width: 90%;
+  max-width: 1200px;
+  animation: modalOpen 0.4s;
+}
+
+#aiModal .close {
+  position: absolute;
+  top: 15px; right: 20px;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#aiModal .close:hover {
+  color: #333;
+  transform: rotate(90deg);
+}
+
+/* ★ 新增：AI Modal 圖片樣式 */
+.ai-modal-image {
+  display: block;
+  width: 400px;
+  height: 400px;
+  margin: 20px auto;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+/* 手機版響應式調整 */
+@media (max-width: 820px) {
+  .ai-modal-image {
+    width: 350px;
+    height: 350px;
+    margin: 15px auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .ai-modal-image {
+    width: 250px;
+    height: 250px;
+    margin: 10px auto;
+  }
+}
+
+
+/* 增強AI對話框樣式 */
+#aiChatContainer {
+  margin-bottom: 15px;
+  min-height: 300px; 
+  max-height: 500px; 
+  overflow-y: auto; 
+  border: 1px solid #ccc; 
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.chat-assistant {
+  background: linear-gradient(to right, #e8f4f8, #f2f9ff);
+  padding: 12px;
+  margin: 8px 5px;
+  border-radius: 12px;
+  border-top-left-radius: 4px;
+  color: #333;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  max-width: 85%;
+  margin-right: auto;
+  position: relative;
+}
+
+.chat-user {
+  background: linear-gradient(to right, #dcf8c6, #e5f7d3);
+  padding: 12px;
+  margin: 8px 5px;
+  border-radius: 12px;
+  border-top-right-radius: 4px;
+  text-align: right;
+  color: #333;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  max-width: 85%;
+  margin-left: auto;
+  position: relative;
+}
+
+.ai-input-container {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+#aiUserInput {
+  flex: 1;
+  padding: 12px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  margin-right: 10px;
+}
+
+#sendAiBtn {
+  padding: 10px 20px;
+  border-radius: 20px;
+  background: linear-gradient(45deg, #00bfff, #007fff);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  min-width: 80px;
+}
+
+.ai-suggestions {
+  margin-top: 10px;
+}
+
+.ai-suggestions p {
+  font-size: 0.9em;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.suggestion-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.suggestion-chip {
+  background: #f0f0f0;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid #ddd;
+}
+
+.suggestion-chip:hover {
+  background: #e0e0e0;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.loading-dots {
+  display: flex;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  margin: 0 3px;
+  background: #888;
+  border-radius: 50%;
+  animation: dot-pulse 1.5s infinite ease-in-out;
+}
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes dot-pulse {
+  0%, 100% { transform: scale(0.8); opacity: 0.5; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+/* 更改密碼模態視窗樣式 */
+#changePasswordModal .modal-content {
+  max-width: 500px;
+}
+#changePasswordModal .form-group {
+  margin-bottom: 15px;
+}
+#passwordError {
+  color: #ff6b6b;
+  margin: 10px 0;
+  font-weight: bold;
+  display: none;
+}
+    </style>
+
+  </head>
+
+  <body>
+    <!-- 登入畫面 -->
+    <div id="loginScreen">
+      <div id="loginBox">
+        <img src="昶青實業LOGO確定版-PNG.png" alt="TCC" class="logo-img">
+        <h3>昶青數位資料中心登入</h3>
+        <div class="form-group">
+          <label for="username">使用者帳號</label>
+          <input type="text" id="username" placeholder="請輸入帳號">
+        </div>
+        <div class="form-group">
+          <label for="password">使用者密碼</label>
+          <input type="password" id="password" placeholder="請輸入密碼">
+        </div>
+        <div id="loginError"></div>
+       <button onclick="loginUser()" style="margin-top: 15px;">登入系統</button>
+        <h6 style="text-align: center; color: #8f8d8d;margin-top: 20px;">Designed by T.C.C.管理本部</h6>
+      </div>
+    </div>
+
+    <!-- 主應用程式 -->
+    <div class="container">
+      <img src="昶青實業LOGO確定版-PNG.png" alt="TCC" class="logo-img">
+      <h2>昶青數位資料中心</h2>
+      
+      <button id="logoutButton" onclick="logoutUser()">登出</button>
+      <div id="userInfo">
+        歡迎, <span id="userName"></span>
+        <div id="userRole"></div>
+      </div>
+      <button id="statsButton" onclick="showStats()">使用統計</button>
+      <!-- 只有s3看到的按鈕 -->
+      <button id="linksButton" onclick="showLinks()">超級連結</button>
+
+      <!-- ★ NEW: AI助手按鈕 (所有人可見) -->
+      <button id="aiButton" onclick="showAiModal()">AI主任</button>
+      <!-- 在 #aiButton 後添加福委會按鈕 -->
+      <button id="welfareButton" onclick="showWelfarePage()">福委會</button>
+      <!-- 新增：昶青文化按鈕 -->
+      <button id="cultureButton" onclick="showCulturePage()">昶青文化</button>
+      
+      <div class="form-group first-form-group">
+        <label for="folderSelect">請選擇部門</label>
+        <select id="folderSelect" onchange="loadFiles()">
+          <option value="">請選擇...</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="typeSelect">請選擇文件類別</label>
+        <select id="typeSelect" onchange="loadFiles()">
+          <option value="all" selected>全部文件</option>
+          <option value="辦法">辦法計畫</option>
+          <option value="其他文件">其他文件</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="searchInput">檔案搜尋</label>
+        <input type="text" id="searchInput" placeholder="請輸入關鍵字..." oninput="loadFiles()">
+      </div>
+      
+      <div class="form-group">
+        <label for="fileSelect">請選擇檔案</label>
+        <select id="fileSelect" onchange="showFile()">
+          <option value="">請選擇...</option>
+        </select>
+      </div>
+       <h6 style="text-align: center; color: #808080;">Designed by T.C.C.管理本部</h6>
+      <div id="result"></div>
+    </div>
+    
+    <!-- 使用統計 Modal -->
+    <div id="statsModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>使用統計</h2>
+        <div id="vendorsChart" class="chart-container"></div>
+        <div id="filesChart" class="chart-container"></div>
+      </div>
+    </div>
+
+    <!-- 超級連結 Modal (只給s3用) -->
+    <div id="linksModal">
+      <div class="modal-content">
+        <span class="close" onclick="closeLinksModal()">&times;</span>
+        <h2>重要連結</h2>
+        <div id="linksContainer"></div>
+      </div>
+    </div>
+
+    <!-- 更新AI對話 Modal -->
+    <div id="aiModal">
+      <div class="modal-content">
+        <span class="close" onclick="closeAiModal()">&times;</span>
+        <h2>GAI資料中心<br>數位主任-Willion</h2>
+        <!-- ★ 新增：插入 R1.png 圖片 -->
+        <img src="R1.png" alt="AI Assistant" class="ai-modal-image">
+        <div id="aiChatContainer"></div>
+        <div class="ai-input-container">
+          <input type="text" id="aiUserInput" placeholder="請輸入想找的文件或問題" onkeypress="if(event.keyCode === 13) sendMessageToAi()">
+          <button id="sendAiBtn" onclick="sendMessageToAi()">送出</button>
+        </div>
+        <div class="ai-suggestions">
+          <p>延伸問題：</p>
+          <div class="suggestion-chips">
+            <span class="suggestion-chip" onclick="useAiSuggestion(this)">特休獎勵金</span>
+            <span class="suggestion-chip" onclick="useAiSuggestion(this)">環境品質</span>
+            <span class="suggestion-chip" onclick="useAiSuggestion(this)">員工餐飲</span>
+            <span class="suggestion-chip" onclick="useAiSuggestion(this)">員工服裝</span>
+            <span class="suggestion-chip" onclick="useAiSuggestion(this)">出差</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 更改密碼模態視窗 -->
+    <div id="changePasswordModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeChangePasswordModal()">&times;</span>
+        <h2>更改密碼</h2>
+        <div class="form-group">
+          <label for="currentPassword">目前密碼:</label>
+          <input type="password" id="currentPassword" required>
+        </div>
+        <div class="form-group">
+          <label for="newPassword">新密碼:</label>
+          <input type="password" id="newPassword" required>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">確認新密碼:</label>
+          <input type="password" id="confirmPassword" required>
+        </div>
+        <div id="passwordError" style="color: #ff6b6b; margin: 10px 0; font-weight: bold; display: none;"></div>
+        <button onclick="changePassword()">確認更改</button>
+      </div>
+    </div>
+
+    <script>
+          // 在 <script> 開頭添加
+    let idleTimer = null;
+    const IDLE_TIMEOUT = 10 * 60 * 1000; // 10分鐘
+    
+    // 在 window.onload 和 loginUser() 成功後調用
+    function startIdleTimer() {
+      if (idleTimer) clearTimeout(idleTimer);
+      
+      idleTimer = setTimeout(() => {
+        alert('閒置超過10分鐘，系統將自動登出');
+        clearAuthData();
+        currentUser = null;
+        document.getElementById('loginScreen').style.display = 'flex';
+      }, IDLE_TIMEOUT);
+    }
+    
+    // 重置計時器 (用戶有活動時)
+    function resetIdleTimer() {
+      startIdleTimer();
+    }
+    
+    // 監聽用戶活動
+    document.addEventListener('mousemove', resetIdleTimer);
+    document.addEventListener('keypress', resetIdleTimer);
+    document.addEventListener('click', resetIdleTimer);
+
+      /*************************************************
+       * 1) Web App URL
+       *************************************************/
+      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzc2iin5SbdKovIAYgzz9MfBliTVMb5mIsaXrE0kEYWqWEYHJy26l5P7oHkB0g1u-HcqA/exec";
+      let currentUser = null;
+      
+      /*************************************************
+       * 2) 檢查是否已登入 + 字母特效
+       *************************************************/
+      window.onload = function() {
+        const token = localStorage.getItem('authToken');
+        const csrfToken = localStorage.getItem('csrfToken'); // 添加 CSRF token 檢查
+        if (token && csrfToken) {
+          callGAS('getSubfolders')
+            .then(data => {
+              if (data.success) {
+                document.getElementById('loginScreen').style.display = 'none';
+                currentUser = {
+                  username: localStorage.getItem('username'),
+                  name: localStorage.getItem('name'),
+                  role: localStorage.getItem('role'),
+                  permission: localStorage.getItem('permissionLevel') || ''
+                };
+                updateUserInfo();
+                populateFolderDropdown(data.result);
+              } else {
+                clearAuthData();
+                document.getElementById('loginScreen').style.display = 'flex';
+              }
+            })
+            .catch(err => {
+              console.error("Fetch error:", err);
+              clearAuthData();
+              document.getElementById('loginScreen').style.display = 'flex';
+            });
+        }
+        
+        createTCCLetters(); // 建立 T, C, C 字母特效
+      };
+
+      // 清除所有身份驗證數據
+      function clearAuthData() {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('csrfToken');
+        localStorage.removeItem('username');
+        localStorage.removeItem('name');
+        localStorage.removeItem('role');
+        localStorage.removeItem('loginRowIndex');
+        localStorage.removeItem('permissionLevel');
+      }
+
+      /*************************************************
+       * 3) 登入函數
+       *************************************************/
+      function loginUser() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const loginError = document.getElementById('loginError');
+        
+        if (!username || !password) {
+          loginError.textContent = '請輸入帳號和密碼';
+          loginError.style.display = 'block';
+          return;
+        }
+        
+        callGAS('login', { username, password }, false)
+          .then(data => {
+            if (data.success) {
+              localStorage.setItem('authToken', data.result.token);
+              localStorage.setItem('csrfToken', data.result.csrfToken); // 保存 CSRF token
+              localStorage.setItem('username', data.result.username);
+              localStorage.setItem('name', data.result.name);
+              localStorage.setItem('role', data.result.role);
+              if (data.result.permissionLevel) {
+                localStorage.setItem('permissionLevel', data.result.permissionLevel);
+              }
+              if (data.result.loginRowIndex) {
+                localStorage.setItem('loginRowIndex', data.result.loginRowIndex);
+              }
+              
+              currentUser = {
+                username: data.result.username,
+                name: data.result.name,
+                role: data.result.role,
+                permission: data.result.permissionLevel || ''
+              };
+              
+              document.getElementById('loginScreen').style.display = 'none';
+              updateUserInfo();
+              
+              callGAS('getSubfolders')
+                .then(data => {
+                  if (data.success) {
+                    populateFolderDropdown(data.result);
+                  } else {
+                    console.error("Error:", data.error);
+                  }
+                })
+                .catch(err => console.error("Fetch error:", err));
+            } else {
+              loginError.textContent = data.error || '登入失敗';
+              loginError.style.display = 'block';
+            }
+          })
+          .catch(err => {
+            console.error('登入錯誤:', err);
+            loginError.textContent = '登入發生錯誤，請稍後再試';
+            loginError.style.display = 'block';
+          });
+      }
+
+     /*************************************************
+     * 4) 登出函數
+     *************************************************/
+    function logoutUser() {
+      // 檢查是否已經存在下拉選單
+      const existingDropdown = document.querySelector('.logout-dropdown');
+      if (existingDropdown) {
+        document.body.removeChild(existingDropdown);
+        return;
+      }
+
+      // 添加下拉菜單
+      var dropdown = document.createElement('div');
+      dropdown.className = 'logout-dropdown';
+      dropdown.style.position = 'absolute';
+      dropdown.style.top = '45px';
+      dropdown.style.right = '10px';
+      dropdown.style.backgroundColor = 'white';
+      dropdown.style.borderRadius = '10px';
+      dropdown.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
+      dropdown.style.zIndex = '1000';
+      dropdown.style.overflow = 'hidden';
+      dropdown.style.minWidth = '120px';
+      
+      // 添加更改密碼選項
+      var changePasswordOption = document.createElement('div');
+      changePasswordOption.className = 'dropdown-option';
+      changePasswordOption.textContent = '更改密碼';
+      changePasswordOption.style.padding = '12px 15px';
+      changePasswordOption.style.cursor = 'pointer';
+      changePasswordOption.style.borderBottom = '1px solid #eee';
+      changePasswordOption.style.transition = 'background-color 0.3s';
+      changePasswordOption.style.color = '#333';
+      changePasswordOption.style.fontWeight = 'bold';
+      changePasswordOption.onmouseover = function() {
+        this.style.backgroundColor = '#f5f5f5';
+      };
+      changePasswordOption.onmouseout = function() {
+        this.style.backgroundColor = 'white';
+      };
+      changePasswordOption.onclick = function(e) {
+        e.stopPropagation(); // 防止事件冒泡
+        showChangePasswordModal();
+        document.body.removeChild(dropdown);
+      };
+      
+      // 添加登出選項
+      var logoutOption = document.createElement('div');
+      logoutOption.className = 'dropdown-option';
+      logoutOption.textContent = '登出系統';
+      logoutOption.style.padding = '12px 15px';
+      logoutOption.style.cursor = 'pointer';
+      logoutOption.style.color = '#ff3333';
+      logoutOption.style.fontWeight = 'bold';
+      logoutOption.style.transition = 'background-color 0.3s';
+      logoutOption.onmouseover = function() {
+        this.style.backgroundColor = '#fff0f0';
+      };
+      logoutOption.onmouseout = function() {
+        this.style.backgroundColor = 'white';
+      };
+      logoutOption.onclick = function(e) {
+        e.stopPropagation(); // 防止事件冒泡
+        performLogout();
+      };
+      
+      dropdown.appendChild(changePasswordOption);
+      dropdown.appendChild(logoutOption);
+      document.body.appendChild(dropdown);
+      
+      // 點擊其他地方關閉下拉菜單
+      setTimeout(function() {
+        document.addEventListener('click', function closeDropdown(e) {
+          if (!dropdown.contains(e.target) && e.target.id !== 'logoutButton') {
+            if (document.body.contains(dropdown)) {
+              document.body.removeChild(dropdown);
+            }
+            document.removeEventListener('click', closeDropdown);
+          }
+        });
+      }, 0);
+    }
+
+    function performLogout() {
+      // 添加按鈕點擊效果
+      const logoutBtn = document.getElementById('logoutButton');
+      logoutBtn.classList.add('button-clicked');
+      
+      // 更改按鈕顏色
+      logoutBtn.style.background = 'linear-gradient(45deg, #ff3333, #ff6b6b)';
+      
+      // 延遲執行登出操作
+      setTimeout(() => {
+        const loginRowIndex = localStorage.getItem('loginRowIndex');
+        if (loginRowIndex) {
+          callGAS('logLogout', { rowIndex: loginRowIndex })
+            .then(data => {
+              doLogout();
+            })
+            .catch(err => {
+              doLogout();
+            });
+        } else {
+          doLogout();
+        }
+      }, 300);
+    }
+
+    // 執行登出的實際操作
+    function doLogout() {
+      // 清除本地存儲
+      clearAuthData();
+
+      // 重置當前用戶
+      currentUser = null;
+      
+      // 顯示登入畫面
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('loginError').style.display = 'none';
+      
+      // 重置登出按鈕顏色
+      const logoutBtn = document.getElementById('logoutButton');
+      logoutBtn.style.background = 'linear-gradient(45deg, #ff6b6b, #ff8e8e)';
+      logoutBtn.classList.remove('button-clicked');
+    }
+
+
+    // 顯示更改密碼模態視窗
+    function showChangePasswordModal() {
+      document.getElementById('currentPassword').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmPassword').value = '';
+      document.getElementById('passwordError').style.display = 'none';
+      document.getElementById('changePasswordModal').style.display = 'block';
+    }
+
+    // 關閉更改密碼模態視窗
+    function closeChangePasswordModal() {
+      document.getElementById('changePasswordModal').style.display = 'none';
+    }
+
+    // 更改密碼
+    function changePassword() {
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const passwordError = document.getElementById('passwordError');
+      
+      // 驗證輸入
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        passwordError.textContent = '請填寫所有欄位';
+        passwordError.style.display = 'block';
+        return;
+      }
+      
+      if (newPassword !== confirmPassword) {
+        passwordError.textContent = '新密碼與確認密碼不符';
+        passwordError.style.display = 'block';
+        return;
+      }
+      
+      // 呼叫後端API更改密碼
+      callGAS('changePassword', { 
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+        username: localStorage.getItem('username')
+      })
+      .then(data => {
+        if (data.success) {
+          alert('密碼更改成功！請重新登入。');
+          closeChangePasswordModal();
+          performLogout();
+        } else {
+          passwordError.textContent = data.error || '密碼更改失敗';
+          passwordError.style.display = 'block';
+        }
+      })
+      .catch(err => {
+        console.error('更改密碼錯誤:', err);
+        passwordError.textContent = '更改密碼時發生錯誤，請稍後再試';
+        passwordError.style.display = 'block';
+      });
+    }
+
+      /*************************************************
+       * 5) 更新用戶信息顯示 + s3按鈕顯示
+       *************************************************/
+      function updateUserInfo() {
+        if (currentUser) {
+          document.getElementById('userName').textContent = currentUser.name || currentUser.username;
+          document.getElementById('userRole').textContent = currentUser.role || '';
+          
+          const linksButton = document.getElementById('linksButton');
+          if (currentUser.permission === 's3') {
+            linksButton.style.display = 'block';
+          } else {
+            linksButton.style.display = 'none';
+          }
+        }
+      }
+
+            /*************************************************
+       * 6) 調用 Apps Script
+       *************************************************/
+      function callGAS(action, params = {}, useToken = true) {
+        if (useToken && action !== 'login') {
+          const token = localStorage.getItem('authToken');
+          const csrfToken = localStorage.getItem('csrfToken'); // 添加 CSRF token
+          if (token) {
+            params.token = token;
+            params.csrf = csrfToken; // 每次請求都帶上 CSRF token
+          }
+        }
+        const query = new URLSearchParams({ action, ...params });
+        const url = GAS_WEBAPP_URL + "?" + query.toString();
+
+        return fetch(url)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("HTTP error, status=" + response.status);
+            }
+            return response.json();
+          })
+          .then(data => {
+            if (data.needLogin) {
+              clearAuthData();
+              document.getElementById('loginScreen').style.display = 'flex';
+              throw new Error('需要重新登入');
+            }
+            return data;
+          });
+      }
+
+      /*************************************************
+       * 7) 填充部門下拉
+       *************************************************/
+      function populateFolderDropdown(folders) {
+        const select = document.getElementById('folderSelect');
+        select.innerHTML = '<option value="">請選擇...</option>';
+        
+        folders.forEach(folder => {
+          const option = document.createElement('option');
+          option.value = folder.id;
+          option.textContent = folder.name;
+          select.appendChild(option);
+        });
+      }
+
+      /*************************************************
+       * 8) 載入檔案 (含類別篩選 + 分級篩選)
+       *************************************************/
+      function loadFiles() {
+        const folderId = document.getElementById('folderSelect').value;
+        if (!folderId) return;
+
+        const keyword = document.getElementById('searchInput').value.trim();
+        const category = document.getElementById('typeSelect').value;
+
+        callGAS('getFiles', { folderId, keyword })
+          .then(data => {
+            if (data.success) {
+              let files = data.result;
+              files = filterByPermission(files);
+
+              if (category === '辦法') {
+                const keywords = ['辦法', '計畫', '細則'];
+                                files = files.filter(file => {
+                  const nameLower = file.name.toLowerCase();
+                  return keywords.some(kw => nameLower.includes(kw));
+                });
+              } else if (category === '其他文件') {
+                const keywords = ['辦法', '計畫', '細則'];
+                files = files.filter(file => {
+                  const nameLower = file.name.toLowerCase();
+                  return !keywords.some(kw => nameLower.includes(kw));
+                });
+              }
+
+              populateFileDropdown(files);
+            } else {
+              console.error("Error:", data.error);
+            }
+          })
+          .catch(err => console.error("Fetch error:", err));
+      }
+
+      /*************************************************
+       * 分級篩選邏輯
+       *************************************************/
+      function filterByPermission(files) {
+        const p = currentUser ? currentUser.permission : "";
+        if (p === 's3') {
+          return files;
+        } else if (p === 's2') {
+          return files.filter(file => !file.name.toLowerCase().includes('s3'));
+        } else if (p === 's1') {
+          return files.filter(file => file.name.toLowerCase().includes('s1'));
+        }
+        return files;
+      }
+
+      /*************************************************
+       * 9) 填充檔案下拉
+       *************************************************/
+      function populateFileDropdown(files) {
+        const select = document.getElementById('fileSelect');
+        select.innerHTML = '<option value="">請選擇...</option>';
+        files.forEach(file => {
+          const option = document.createElement('option');
+          option.value = file.id;
+          option.textContent = file.name;
+          select.appendChild(option);
+        });
+      }
+
+      /*************************************************
+       * 10) 顯示檔案
+       *************************************************/
+      function showFile() {
+        const fileSelect = document.getElementById('fileSelect');
+        const fileId = fileSelect.value;
+        if (!fileId) {
+          document.getElementById('result').innerHTML = '';
+          return;
+        }
+
+        const fileName = fileSelect.options[fileSelect.selectedIndex].text;
+        const folderSelect = document.getElementById('folderSelect');
+        const folderName = folderSelect.options[folderSelect.selectedIndex].text;
+
+        callGAS('getFilePreviewUrl', { fileId })
+          .then(data => {
+            if (data.success) {
+              displayFile(data.result);
+              callGAS('logRetrieval', { 
+                vendorName: folderName, 
+                fileName: fileName,
+                username: currentUser ? currentUser.name || currentUser.username : ''
+              });
+            }
+          })
+          .catch(err => console.error("Fetch error:", err));
+      }
+
+     function displayFile(fileInfo) {
+  const resultDiv = document.getElementById('result');
+  if (fileInfo.mimeType === 'application/pdf' || fileInfo.mimeType.includes('google-apps')) {
+    // 修改這裡：添加一個包含打開檔案圖示的容器
+    resultDiv.innerHTML = `
+      <div style="position: relative;">
+        <a href="${fileInfo.url}" target="_blank" style="position: absolute; top: 10px; right: 10px; z-index: 10; background-color: rgba(255,255,255,0.7); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
+        <iframe src="${fileInfo.url}" allowfullscreen></iframe>
+      </div>
+    `;
+  } else {
+    resultDiv.innerHTML = `<a href="${fileInfo.url}" class="download-link" target="_blank">下載 ${fileInfo.name}</a>`;
+  }
+}
+
+
+      /*************************************************
+       * 12) 使用統計
+       *************************************************/
+      function showStats() {
+        callGAS('getStatisticsDataOnly')
+          .then(data => {
+            if (data.success) {
+              document.getElementById('statsModal').style.display = 'block';
+              drawCharts(data.result);
+            }
+          })
+          .catch(err => console.error("Fetch error:", err));
+      }
+
+      function closeModal() {
+        document.getElementById('statsModal').style.display = 'none';
+      }
+
+      function drawCharts(statData) {
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(() => {
+          if (statData.vendors.length > 0) {
+            const vendorsData = new google.visualization.DataTable();
+            vendorsData.addColumn('string', '部門');
+            vendorsData.addColumn('number', '查詢次數');
+            vendorsData.addRows(statData.vendors);
+            const vendorsOptions = {
+              title: '【部門熱度】查詢統計',
+              pieHole: 0.4,
+              legend: { position: 'bottom' }
+            };
+            const vendorsChart = new google.visualization.PieChart(document.getElementById('vendorsChart'));
+            vendorsChart.draw(vendorsData, vendorsOptions);
+          } else {
+            document.getElementById('vendorsChart').innerHTML = '<p>暫無部門查詢數據</p>';
+          }
+
+          if (statData.files.length > 0) {
+            const filesData = new google.visualization.DataTable();
+            filesData.addColumn('string', '檔案');
+            filesData.addColumn('number', '查詢次數');
+            filesData.addRows(statData.files);
+            const filesOptions = {
+              title: '【檔案熱度】查詢統計',
+              legend: { position: 'bottom' }
+            };
+            const filesChart = new google.visualization.BarChart(document.getElementById('filesChart'));
+            filesChart.draw(filesData, filesOptions);
+          } else {
+            document.getElementById('filesChart').innerHTML = '<p>暫無檔案查詢數據</p>';
+          }
+        });
+      }
+
+      /*************************************************
+       * 13) 點擊 modal 外關閉
+       *************************************************/
+      window.onclick = function(event) {
+        const statsModal = document.getElementById('statsModal');
+        const linksModal = document.getElementById('linksModal');
+        const aiModal    = document.getElementById('aiModal'); 
+        const changePasswordModal = document.getElementById('changePasswordModal');
+
+        if (event.target === statsModal) {
+          statsModal.style.display = "none";
+        } else if (event.target === linksModal) {
+          linksModal.style.display = "none";
+        } else if (event.target === aiModal) {
+          aiModal.style.display = "none";
+        } else if (event.target === changePasswordModal) {
+          changePasswordModal.style.display = "none";
+        }
+      };
+
+      /*************************************************
+       * 14) TCC 字母特效
+       *************************************************/
+      function createTCCLetters() {
+        const lettersData = [
+          { text: 'T', className: 'letter-t' },
+          { text: 'C', className: 'letter-c1' },
+          { text: 'C', className: 'letter-c2' }
+        ];
+        
+        lettersData.forEach(ld => {
+          const el = document.createElement('div');
+          el.classList.add('letter', ld.className);
+          el.innerText = ld.text;
+          el.style.left = '50%';
+          el.style.top = '50%';
+          document.body.appendChild(el);
+        });
+      }
+
+      /*************************************************
+       * ★ NEW: 顯示「重要連結」(只有 s3)
+       *************************************************/
+function showLinks() {
+  // 添加按鈕點擊效果
+  const linksBtn = document.getElementById('linksButton');
+  linksBtn.classList.add('button-clicked');
+  
+  // 更改按鈕顏色
+  linksBtn.style.background = 'linear-gradient(45deg, #ff8c00, #ffb700)';
+  
+  setTimeout(() => {
+    callGAS('getImportantLinks')
+      .then(data => {
+        if (data.success) {
+          const links = data.result; 
+          renderLinksTable(links);
+          
+          // 確保模態視窗正確顯示
+          const modal = document.getElementById('linksModal');
+          modal.style.display = 'block';
+          
+          // 確保模態內容置中
+          const modalContent = modal.querySelector('.modal-content');
+          if (modalContent) {
+            modalContent.style.margin = '10% auto';
+            modalContent.style.left = '0';
+            modalContent.style.right = '0';
+          }
+          
+          setTimeout(() => {
+            linksBtn.style.background = 'linear-gradient(45deg, #ffb700, #ffc947)';
+            linksBtn.classList.remove('button-clicked');
+          }, 300);
+        }
+      });
+  }, 300);
+}
+
+      
+      function closeLinksModal() {
+        document.getElementById('linksModal').style.display = 'none';
+        const linksBtn = document.getElementById('linksButton');
+        linksBtn.style.background = 'linear-gradient(45deg, #ffb700, #ffc947)';
+        linksBtn.classList.remove('button-clicked');
+      }
+      
+      function renderLinksTable(links) {
+        const container = document.getElementById('linksContainer');
+        if (!links || links.length === 0) {
+          container.innerHTML = '<p>暫無重要連結資料</p>';
+          return;
+        }
+        let html = '<table id="linksTable">';
+        html += '<tr><th>名稱</th><th>超連結</th></tr>';
+        links.forEach(item => {
+          html += `<tr>
+                     <td>${item.name}</td>
+                     <td><a href="${item.url}" target="_blank">${item.url}</a></td>
+                   </tr>`;
+        });
+        html += '</table>';
+        container.innerHTML = html;
+      }
+
+      /*************************************************
+       * ★ NEW: AI助手按鈕 & Modal
+       *************************************************/
+      // 更新AI對話相關JS函數
+      let chatHistory = [];
+
+      function showAiModal() {
+        document.getElementById('aiModal').style.display = 'block';
+        // 初次開啟時，先放兩句話(問候 + 問問題)
+        const chatContainer = document.getElementById('aiChatContainer');
+        if (chatContainer.innerHTML === '') {
+          chatContainer.innerHTML = `
+            <div class="chat-assistant">哈囉～願你有個美好的一天～</div>
+            <div class="chat-assistant">你想要找什麼檔案呢？給我關鍵詞（多個關鍵詞，中間空格就好）～</div>
+          `;
+          
+          // 儲存對話歷史
+          chatHistory = [
+            {
+              role: "assistant",
+              content: "哈囉～願你擁有美好的一天～"
+            },
+            {
+              role: "assistant",
+              content: "你想要找什麼檔案呢？給我關鍵詞（多個關鍵詞，中間空格就好）～"
+            }
+          ];
+        }
+      }
+
+      function closeAiModal() {
+        document.getElementById('aiModal').style.display = 'none';
+      }
+
+      function sendMessageToAi() {
+        const userInput = document.getElementById('aiUserInput').value.trim();
+        if (!userInput) return;
+        
+        // 先把使用者的話顯示在畫面
+        const chatContainer = document.getElementById('aiChatContainer');
+        const userMsgHtml = `<div class="chat-user">${escapeHtml(userInput)}</div>`;
+        chatContainer.innerHTML += userMsgHtml;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        
+        // 顯示載入中動畫
+        const loadingId = showLoadingMessage();
+        
+        // 儲存用戶訊息到歷史
+        chatHistory.push({
+          role: "user",
+          content: userInput
+        });
+        
+        // 呼叫後端
+        callGAS('aiAssistant', { 
+          userMessage: userInput,
+          chatHistory: JSON.stringify(chatHistory)
+        })
+          .then(data => {
+            // 移除載入中訊息
+            removeLoadingMessage(loadingId);
+            
+            if (data.success) {
+              const aiReply = data.result.reply;
+              // 直接插入 HTML 字串
+              const assistantMsgHtml = `<div class="chat-assistant">${aiReply}</div>`;
+              chatContainer.innerHTML += assistantMsgHtml;
+              
+              // 儲存AI回覆到歷史
+              chatHistory.push({
+                role: "assistant",
+                content: aiReply.replace(/<br>/g, '\n').replace(/<[^>]*>/g, '') // 移除HTML標籤，保留換行
+              });
+              
+              // 限制歷史長度，避免過長
+              if (chatHistory.length > 10) {
+                chatHistory = chatHistory.slice(-10);
+              }
+              
+              // 更新建議問題
+              updateSuggestions(aiReply);
+            } else {
+              chatContainer.innerHTML += `<div class="chat-assistant">抱歉，發生錯誤：${data.error}</div>`;
+            }
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+          })
+          .catch(err => {
+            console.error("sendMessageToAi error:", err);
+            removeLoadingMessage(loadingId);
+            chatContainer.innerHTML += `<div class="chat-assistant">抱歉，目前無法取得回應。</div>`;
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+          })
+          .finally(() => {
+            document.getElementById('aiUserInput').value = "";
+          });
+      }
+
+      // 顯示載入中動畫
+      function showLoadingMessage() {
+        const chatContainer = document.getElementById('aiChatContainer');
+        const loadingId = 'loading-' + Date.now();
+        chatContainer.innerHTML += `
+          <div id="${loadingId}" class="chat-assistant" style="display:flex; align-items:center;">
+            <div class="loading-dots">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+            <span style="margin-left:10px">正在思考中...</span>
+          </div>
+        `;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        return loadingId;
+      }
+
+      // 移除載入中訊息
+      function removeLoadingMessage(loadingId) {
+        const loadingElement = document.getElementById(loadingId);
+        if (loadingElement) {
+          loadingElement.remove();
+        }
+      }
+      
+      // 更新建議問題
+      function updateSuggestions(aiReply) {
+        // 從AI回覆中提取建議問題
+        const suggestionsMatch = aiReply.match(/您可能還想了解：<br>(.*?)(?:<br>|$)/s);
+        
+        if (suggestionsMatch && suggestionsMatch[1]) {
+          const suggestionsText = suggestionsMatch[1];
+          const suggestions = suggestionsText.split('<br>').map(s => s.trim().replace(/^[•\-]\s*/, '').replace(/「|」/g, ''));
+          
+          const validSuggestions = suggestions.filter(s => s && s.length > 0 && s.length < 50);
+          
+          if (validSuggestions.length > 0) {
+            const suggestionsContainer = document.querySelector('.suggestion-chips');
+            suggestionsContainer.innerHTML = '';
+            
+            validSuggestions.forEach(suggestion => {
+              const chip = document.createElement('span');
+              chip.className = 'suggestion-chip';
+              chip.textContent = suggestion;
+              chip.onclick = function() { useAiSuggestion(this); };
+              suggestionsContainer.appendChild(chip);
+            });
+          }
+        }
+      }
+
+      // 使用建議問題
+      function useAiSuggestion(element) {
+        const suggestion = element.textContent;
+        document.getElementById('aiUserInput').value = suggestion;
+        sendMessageToAi();
+      }
+
+      function escapeHtml(str) {
+        return str.replace(/[<>&"]/g, function(c){
+          switch(c) {
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '&': return '&amp;';
+            case '"': return '&quot;';
+          }
+          return c;
+        });
+      }
+
+      // 添加到原有 JavaScript 中
+      function showWelfarePage() {
+        // 添加按鈕點擊效果
+        const welfareBtn = document.getElementById('welfareButton');
+        welfareBtn.classList.add('button-clicked');
+        
+        // 更改按鈕顏色
+        welfareBtn.style.background = 'linear-gradient(45deg, #ff7e5f, #feb47b)';
+        
+        // 延遲執行跳轉操作
+        setTimeout(() => {
+          // 儲存當前用戶資訊到 sessionStorage，以便在福委會頁面使用
+          if (currentUser) {
+            sessionStorage.setItem('username', currentUser.username);
+            sessionStorage.setItem('name', currentUser.name);
+            sessionStorage.setItem('role', currentUser.role);
+            sessionStorage.setItem('permissionLevel', currentUser.permission);
+            sessionStorage.setItem('authToken', localStorage.getItem('authToken'));
+            sessionStorage.setItem('csrfToken', localStorage.getItem('csrfToken'));
+          }
+          
+          // 跳轉到福委會頁面
+          window.location.href = 'welfare.html';
+        }, 300);
+      }
+
+      // 添加昶青文化頁面跳轉函數
+      function showCulturePage() {
+        // 添加按鈕點擊效果
+        const cultureBtn = document.getElementById('cultureButton');
+        cultureBtn.classList.add('button-clicked');
+        
+        // 更改按鈕顏色
+        cultureBtn.style.background = 'linear-gradient(45deg, #9b59b6, #a569bd)';
+        
+        // 延遲執行跳轉操作
+        setTimeout(() => {
+          // 儲存當前用戶資訊到 sessionStorage，以便在文化頁面使用
+          if (currentUser) {
+            sessionStorage.setItem('username', currentUser.username);
+            sessionStorage.setItem('name', currentUser.name);
+            sessionStorage.setItem('role', currentUser.role);
+            sessionStorage.setItem('permissionLevel', currentUser.permission);
+            sessionStorage.setItem('authToken', localStorage.getItem('authToken'));
+            sessionStorage.setItem('csrfToken', localStorage.getItem('csrfToken'));
+          }
+          
+          // 跳轉到昶青文化頁面
+          window.location.href = 'culture.html';
+        }, 300);
+      }
+    </script>
+  </body>
+</html>
