@@ -1348,7 +1348,6 @@ a.download-link::before {
             }
           })
           .catch(err => {
-            console.log('登入 API 回傳:',data);
             console.error('登入錯誤:', err);
             loginError.textContent = '登入發生錯誤，請稍後再試';
             loginError.style.display = 'block';
