@@ -1236,7 +1236,7 @@ a.download-link::before {
        * 1) Web App URL
        *************************************************/
       //const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzc2iin5SbdKovIAYgzz9MfBliTVMb5mIsaXrE0kEYWqWEYHJy26l5P7oHkB0g1u-HcqA/exec"; //阿國協理使用
-      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbx7bGihUsOVR7u43yI0P3uZLAAHW73pXxWoADE1IBmv1JQjQZVnCCRTMqVHbzk-tIMb/exec";
+      const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwwgvo2gnioxaAEGkJPF1nvu0WWOrwx6ET_lLRc2WvZ3MbC3bs5OvfO6sqD53xGYFUm/exec";
       let currentUser = null;
       
       /*************************************************
@@ -1562,7 +1562,7 @@ a.download-link::before {
         const query = new URLSearchParams({ action, ...params });
         const url = GAS_WEBAPP_URL + "?" + query.toString();
 
-        return fetch(url)
+        return fetch(url, {method: 'GET', mode: 'cors', redirect: 'follow', headers: {'Accept': 'application/json'}})
           .then(response => {
             if (!response.ok) {
               throw new Error("HTTP error, status=" + response.status);
