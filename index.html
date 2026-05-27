@@ -1321,7 +1321,7 @@ a.download-link::before {
               if (data.result.loginRowIndex) {
                 localStorage.setItem('loginRowIndex', data.result.loginRowIndex);
               }
-              
+              console.log('登入 API 回傳:',data);
               currentUser = {
                 username: data.result.username,
                 name: data.result.name,
@@ -1342,11 +1342,13 @@ a.download-link::before {
                 })
                 .catch(err => console.error("Fetch error:", err));
             } else {
+              console.log('登入 API 回傳:',data);
               loginError.textContent = data.error || '登入失敗';
               loginError.style.display = 'block';
             }
           })
           .catch(err => {
+            console.log('登入 API 回傳:',data);
             console.error('登入錯誤:', err);
             loginError.textContent = '登入發生錯誤，請稍後再試';
             loginError.style.display = 'block';
