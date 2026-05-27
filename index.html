@@ -1301,9 +1301,17 @@ a.download-link::before {
         callGAS('login', { username, password }, false)
           .then(data => {
             console.log('登入 API 回傳:',data);
+            
             if (data.success) {
-              localStorage.setItem('authToken', data.result.token);
-              localStorage.setItem('csrfToken', data.result.csrfToken); // 保存 CSRF token
+              //localStorage.setItem('authToken', data.result.token);
+              //localStorage.setItem('csrfToken', data.result.csrfToken); // 保存 CSRF token
+              
+              // 如果沒有 token，給預設值
+              const token = data.token || 'login_ok';
+              const csrfToken = data.csrf.token || 'csrf_ok';
+              localStorage.setItem('authToken', token);
+              localStorage.setItem('csrfToken', csrfToken); // 保存 CSRF token
+              
               localStorage.setItem('username', data.result.username);
               localStorage.setItem('name', data.result.name);
               localStorage.setItem('role', data.result.role);
