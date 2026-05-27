@@ -1300,6 +1300,7 @@ a.download-link::before {
         
         callGAS('login', { username, password }, false)
           .then(data => {
+            console.log('登入 API 回傳:',data);
             if (data.success) {
               localStorage.setItem('authToken', data.result.token);
               localStorage.setItem('csrfToken', data.result.csrfToken); // 保存 CSRF token
