@@ -1288,72 +1288,71 @@ a.download-link::before {
        * 3) 登入函數
        *************************************************/
      function loginUser() {
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
-  const loginError = document.getElementById('loginError');
-
-  if (!username || !password) {
-    loginError.textContent = '請輸入帳號和密碼';
-    loginError.style.display = 'block';
-    return;
-  }
-
-  callGAS('login', { username, password }, false)
-    .then(data => {
-      console.log('登入 API 回傳:', data);
-
-      if (data.success) {
-        const result = data.result || {};
-
-        const token = result.token || data.token || 'login_ok';
-        const csrfToken = result.csrfToken || data?.csrf?.token || 'csrf_ok';
-
-        localStorage.setItem('authToken', token);
-        localStorage.setItem('csrfToken', csrfToken);
-
-        localStorage.setItem('username', result.username || username);
-        localStorage.setItem('name', result.name || '');
-        localStorage.setItem('role', result.role || '');
-
-        if (result.permissionLevel) {
-          localStorage.setItem('permissionLevel', result.permissionLevel);
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const loginError = document.getElementById('loginError');
+        
+        if (!username || !password) {
+          loginError.textContent = '請輸入帳號和密碼';
+          loginError.style.display = 'block';
+          return;
         }
-
-        if (result.loginRowIndex) {
-          localStorage.setItem('loginRowIndex', result.loginRowIndex);
-        }
-
-        currentUser = {
-          username: result.username || username,
-          name: result.name || '',
-          role: result.role || '',
-          permission: result.permissionLevel || ''
-        };
-
-        document.getElementById('loginScreen').style.display = 'none';
-        updateUserInfo();
-
-        callGAS('getSubfolders')
-          .then(folderData => {
-            if (folderData.success) {
-              populateFolderDropdown(folderData.result);
+        
+        callGAS('login', { username, password }, false)
+          .then(data => {
+            console.log('登入 API 回傳:',data);
+            
+            if (data.success) {
+              //localStorage.setItem('authToken', data.result.token);
+              //localStorage.setItem('csrfToken', data.result.csrfToken); // 保存 CSRF token
+              
+              // 如果沒有 token，給預設值
+              const token = data.token || 'login_ok';
+              const csrfToken = data.csrf.token || 'csrf_ok';
+              localStorage.setItem('authToken', token);
+              localStorage.setItem('csrfToken', csrfToken); // 保存 CSRF token
+              
+              localStorage.setItem('username', data.result.username);
+              localStorage.setItem('name', data.result.name);
+              localStorage.setItem('role', data.result.role);
+              if (data.result.permissionLevel) {
+                localStorage.setItem('permissionLevel', data.result.permissionLevel);
+              }
+              if (data.result.loginRowIndex) {
+                localStorage.setItem('loginRowIndex', data.result.loginRowIndex);
+              }
+              console.log('登入 API 回傳:',data);
+              currentUser = {
+                username: data.result.username,
+                name: data.result.name,
+                role: data.result.role,
+                permission: data.result.permissionLevel || ''
+              };
+              
+              document.getElementById('loginScreen').style.display = 'none';
+              updateUserInfo();
+              
+              callGAS('getSubfolders')
+                .then(data => {
+                  if (data.success) {
+                    populateFolderDropdown(data.result);
+                  } else {
+                    console.error("Error:", data.error);
+                  }
+                })
+                .catch(err => console.error("Fetch error:", err));
             } else {
-              console.error('Error:', folderData.error);
+              console.log('登入 API 回傳:',data);
+              loginError.textContent = data.error || '登入失敗';
+              loginError.style.display = 'block';
             }
           })
-          .catch(err => console.error('Fetch error:', err));
-      } else {
-        loginError.textContent = data.error || '登入失敗';
-        loginError.style.display = 'block';
+          .catch(err => {
+            console.error('登入錯誤:', err);
+            loginError.textContent = '登入發生錯誤，請稍後再試';
+            loginError.style.display = 'block';
+          });
       }
-    })
-    .catch(err => {
-      console.error('登入錯誤:', err);
-      loginError.textContent = '登入發生錯誤，請稍後再試';
-      loginError.style.display = 'block';
-    });
-}
-
      /*************************************************
      * 4) 登出函數
      *************************************************/
