@@ -1561,6 +1561,7 @@ a.download-link::before {
        * 6) 調用 Apps Script
        *************************************************/
       function callGAS(action, params = {}, useToken = true) {
+        debugger;
         if (useToken && action !== 'login') {
           const token = localStorage.getItem('authToken');
           const csrfToken = localStorage.getItem('csrfToken'); // 添加 CSRF token
