@@ -1349,7 +1349,7 @@ a.download-link::before {
           })
           .catch(err => {
             console.error('登入錯誤:', err);
-            loginError.textContent = '登入發生錯誤，請稍後再試';
+            loginError.textContent = username+'登入發生錯誤，請稍後再試';
             loginError.style.display = 'block';
           });
       }
