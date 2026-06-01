@@ -1320,21 +1320,21 @@ a.download-link::before {
               localStorage.setItem('authToken', token);
               localStorage.setItem('csrfToken', csrfToken); // 保存 CSRF token
               
-              localStorage.setItem('username', data.result.username);
-              localStorage.setItem('name', data.result.name);
-              localStorage.setItem('role', data.result.role);
-              if (data.result.permissionLevel) {
-                localStorage.setItem('permissionLevel', data.result.permissionLevel);
+              localStorage.setItem('username', data.username); //20260601 debug:移除result
+              localStorage.setItem('name', data.name);
+              localStorage.setItem('role', data.role);
+              if (data.permissionLevel) {
+                localStorage.setItem('permissionLevel', data.permissionLevel);
               }
-              if (data.result.loginRowIndex) {
-                localStorage.setItem('loginRowIndex', data.result.loginRowIndex);
+              if (data.loginRowIndex) {
+                localStorage.setItem('loginRowIndex', data.loginRowIndex);
               }
               console.log('登入 API 回傳:',data);
               currentUser = {
-                username: data.result.username,
-                name: data.result.name,
-                role: data.result.role,
-                permission: data.result.permissionLevel || ''
+                username: data.username,
+                name: data.name,
+                role: data.role,
+                permission: data.permissionLevel || ''
               };
               
               document.getElementById('loginScreen').style.display = 'none';
@@ -1343,7 +1343,7 @@ a.download-link::before {
               callGAS('getSubfolders')
                 .then(data => {
                   if (data.success) {
-                    populateFolderDropdown(data.result);
+                    populateFolderDropdown(data);
                   } else {
                     console.error("Error:", data.error);
                   }
