@@ -1312,10 +1312,8 @@ a.download-link::before {
               // 如果沒有 token，給預設值
               //const token = data.token || 'login_ok';
               //const csrfToken = data.csrf.token || 'csrf_ok';
-              //const token = data?.token || 'login_ok';  2026/06/01
-              //const csrfToken = data?.csrf?.token || 'csrf_ok'; 2026/06/01
-              const token = data?.result?.token || data?.token || 'login_ok';
-              const csrfToken = data?.result?.csrfToken || data?.csrf?.token || 'csrf_ok';
+              const token = data?.token || 'login_ok';  
+              const csrfToken = data?.csrf?.token || 'csrf_ok'; 
               
               localStorage.setItem('authToken', token);
               localStorage.setItem('csrfToken', csrfToken); // 保存 CSRF token
