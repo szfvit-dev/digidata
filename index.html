@@ -1248,6 +1248,9 @@ a.download-link::before {
         if (token && csrfToken) {
           callGAS('getSubfolders')
             .then(data => {
+// 2026/06/01              
+              console.log('登入 API 回傳完整資料:', JSON.stringify(data, null, 2)); 
+              console.log('data.result:', data.result);
               if (data.success) {
                 document.getElementById('loginScreen').style.display = 'none';
                 currentUser = {
