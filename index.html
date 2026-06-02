@@ -1306,7 +1306,7 @@ a.download-link::before {
         callGAS('login', { username, password }, false)
           .then(data => {
             console.log('登入 API 回傳:',data);
-            
+            console.log('data.result:', data.result);
             if (data.success) {
               //localStorage.setItem('authToken', data.result.token);
               //localStorage.setItem('csrfToken', data.result.csrfToken); // 保存 CSRF token
@@ -1330,6 +1330,7 @@ a.download-link::before {
                 localStorage.setItem('loginRowIndex', data.loginRowIndex);
               }
               console.log('登入 API 回傳:',data);
+              console.log('data.result:', data.result);
               currentUser = {
                 username: data.username,
                 name: data.name,
@@ -1351,6 +1352,7 @@ a.download-link::before {
                 .catch(err => console.error("Fetch error:", err));
             } else {
               console.log('登入 API 回傳:',data);
+              console.log('data.result:', data.result);
               loginError.textContent = data.error || '登入失敗';
               loginError.style.display = 'block';
             }
