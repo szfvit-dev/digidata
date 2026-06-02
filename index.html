@@ -1259,7 +1259,9 @@ a.download-link::before {
                   role: localStorage.getItem('role'),
                   permission: localStorage.getItem('permissionLevel') || ''
                 };
+                console.log('currentUser:', currentUser);
                 updateUserInfo();
+                console.log('currentUser:', currentUser);
                 populateFolderDropdown(data.result);
               } else {
                 clearAuthData();
